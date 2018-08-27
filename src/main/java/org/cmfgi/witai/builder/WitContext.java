@@ -1,4 +1,4 @@
-package org.cmfgi.witai;
+package org.cmfgi.witai.builder;
 
 import com.google.common.io.ByteSource;
 import com.google.common.io.Resources;
@@ -12,18 +12,19 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.Properties;
 
-public final class WitContext {
+final class WitContext {
   private static Logger LOGGER = LoggerFactory.getLogger(WitContext.class);
-  private static final String CONFIGURATION_RESOURCE_LOCATION="wit-ai/wit-ai.properties";
-  private static final String VERSION="version";
+  private static final String CONFIGURATION_RESOURCE_LOCATION = "wit-ai/wit-ai.properties";
+  private static final String VERSION = "version";
+  private static final String ACCESS_TOKEN = "accessToken";
 
   private static Object MONITOR = new Object();
   private Properties properties = new Properties();
   private static WitContext context;
 
-  private static WitContext _instance(){
-    synchronized (MONITOR){
-      if (context == null){
+  private static WitContext _instance() {
+    synchronized (MONITOR) {
+      if (context == null) {
         context = new WitContext();
         URL url = Resources.getResource(CONFIGURATION_RESOURCE_LOCATION);
 
@@ -38,23 +39,30 @@ public final class WitContext {
     }
   }
 
-  public static String getConfiguredVersion(){
+  public static String getConfiguredVersion() {
     String version = _instance().properties.getProperty(VERSION);
-    if (StringUtils.isBlank(version)){
+    if (StringUtils.isBlank(version)) {
       throw new UnsupportedOperationException("version is null");
     }
     return version;
   }
 
+  public static String getToken() {
+    String token = _instance().properties.getProperty(ACCESS_TOKEN);
+    assert token != null;
+    return token;
+  }
+
   /**
    * Returns the endpoint configuration by name.
+   *
    * @param name, Name of the endpoint.
    * @return The unparsed url of the endpoint.
    * @throws EndpointNotImplementedException in case no valid config was found.
    */
-  public static String getEndpointForName(String name){
+  public static String getEndpointForName(String name) {
     String endpoint = _instance().properties.getProperty(name);
-    if (StringUtils.isBlank(name)){
+    if (StringUtils.isBlank(name)) {
       throw new EndpointNotImplementedException(name);
     }
     return endpoint;
