@@ -14,8 +14,12 @@ import java.util.Arrays;
 import java.util.Optional;
 import java.util.Properties;
 
+/**
+ * Class which is capable of accessing the properties provided in resources/wit-ai/wit-ai.properties.
+ * WitContext is also providing convenient methods for access.
+ */
 final class WitContext {
-  public static final String COMMA_REGEX = ",";
+  private static final String COMMA_REGEX = ",";
   private static Logger LOGGER = LoggerFactory.getLogger(WitContext.class);
   private static final String CONFIGURATION_RESOURCE_LOCATION = "wit-ai/wit-ai.properties";
   private static final String VERSION = "version";
