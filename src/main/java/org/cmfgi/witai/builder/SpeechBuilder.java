@@ -80,7 +80,7 @@ public class SpeechBuilder extends AbstractBuilder<SpeechBuilder,String> {
   }
 
   public SpeechBuilder build() {
-    builder = super.preBuild();
+    super.preBuild();
     return this;
   }
 

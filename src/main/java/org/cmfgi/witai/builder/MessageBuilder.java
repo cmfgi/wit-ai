@@ -47,7 +47,7 @@ public class MessageBuilder extends AbstractBuilder<MessageBuilder, String> {
   }
 
   public MessageBuilder build() {
-    builder = super.preBuild();
+    super.preBuild();
     return this;
   }
 }

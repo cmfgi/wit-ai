@@ -8,11 +8,13 @@ import com.sun.jersey.core.util.MultivaluedMapImpl;
 
 import javax.ws.rs.core.MultivaluedMap;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 abstract class AbstractBuilder<T, K> {
 
-  private static final String AUTHORIZATION_HEADER = "Authorization";
+  static final String AUTHORIZATION_HEADER = "Authorization";
   static final String JSON_CONTENT_TYPE = "application/json";
   static final String CONTENT_TYPE_HEADER = "Content-type";
 
@@ -24,7 +26,9 @@ abstract class AbstractBuilder<T, K> {
   private static Client client;
   private MultivaluedMap<String, String> simpleParameters = new MultivaluedMapImpl();
   private Map<String, String> additionalHeader = new HashMap<>();
-  WebResource.Builder builder;
+  private List<String> additionalPathElements = new LinkedList<>();
+
+  private WebResource.Builder builder;
 
   static {
     ClientConfig cc = new DefaultClientConfig();
@@ -39,7 +43,7 @@ abstract class AbstractBuilder<T, K> {
     this.type = type;
   }
 
-  private WebResource getResource() {
+  protected WebResource getResource() {
     return client.resource(WitContext.getEndpointForName(resourceName));
   }
 
@@ -71,7 +75,12 @@ abstract class AbstractBuilder<T, K> {
   WebResource.Builder preBuild() {
     WebResource resource = getResource();
     simpleParameters.add("v", WitContext.getConfiguredVersion());
-    WebResource.Builder builder = resource.queryParams(simpleParameters).header(AUTHORIZATION_HEADER, "Bearer " + WitContext.getToken());
+
+    for (String path : additionalPathElements) {
+      resource = resource.path(path);
+    }
+
+    builder = resource.queryParams(simpleParameters).header(AUTHORIZATION_HEADER, "Bearer " + WitContext.getToken(resourceName));
     for (String k : additionalHeader.keySet()) {
       builder = builder.header(k, additionalHeader.get(k));
     }
@@ -80,6 +89,10 @@ abstract class AbstractBuilder<T, K> {
 
   void addAdditionalHeader(String k, String v) {
     additionalHeader.put(k, v);
+  }
+
+  void addAdditionalPath(String path){
+    additionalPathElements.add(path);
   }
 
 }

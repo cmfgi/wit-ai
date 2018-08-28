@@ -10,13 +10,18 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
+import java.util.Arrays;
+import java.util.Optional;
 import java.util.Properties;
 
 final class WitContext {
+  public static final String COMMA_REGEX = ",";
   private static Logger LOGGER = LoggerFactory.getLogger(WitContext.class);
   private static final String CONFIGURATION_RESOURCE_LOCATION = "wit-ai/wit-ai.properties";
   private static final String VERSION = "version";
   private static final String ACCESS_TOKEN = "accessToken";
+  private static final String SERVER_ACCESS_TOKEN = "serverAccessToken";
+  private static final String NEEDS_SERVER_ACCESS = "needsServerToken";
 
   private static Object MONITOR = new Object();
   private Properties properties = new Properties();
@@ -47,10 +52,27 @@ final class WitContext {
     return version;
   }
 
-  public static String getToken() {
-    String token = _instance().properties.getProperty(ACCESS_TOKEN);
+  public static String getToken(String builderName) {
+    String token = null;
+    if (needsServerAuthToken(builderName)){
+      token = _instance().properties.getProperty(SERVER_ACCESS_TOKEN);
+    } else {
+      token = _instance().properties.getProperty(ACCESS_TOKEN);
+    }
+
     assert token != null;
     return token;
+  }
+
+  static boolean needsServerAuthToken(String builderName) {
+    String list = _instance().properties.getProperty(NEEDS_SERVER_ACCESS);
+    String[] chunks = list.split(COMMA_REGEX);
+    if (chunks == null) {
+      return false;
+    }
+
+    Optional opt = Arrays.stream(chunks).filter(str -> StringUtils.isNotBlank(str)).filter(str -> builderName.equals(str)).findAny();
+    return opt.isPresent();
   }
 
   /**
