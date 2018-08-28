@@ -8,3 +8,4 @@ Name of the file has to be "wit-ai.properties".
 
 ##usage
 @see BuilderSimpleTest
+Please note that you need an account for wit.ai to fill the accessToken and serverAccessToken property.
