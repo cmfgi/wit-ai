@@ -58,7 +58,7 @@ final class WitContext {
 
   public static String getToken(String builderName) {
     String token = null;
-    if (needsServerAuthToken(builderName)){
+    if (needsServerAuthToken(builderName)) {
       token = _instance().properties.getProperty(SERVER_ACCESS_TOKEN);
     } else {
       token = _instance().properties.getProperty(ACCESS_TOKEN);
@@ -75,7 +75,9 @@ final class WitContext {
       return false;
     }
 
-    Optional opt = Arrays.stream(chunks).filter(str -> StringUtils.isNotBlank(str)).filter(str -> builderName.equals(str)).findAny();
+    Optional opt = Arrays.stream(chunks)
+            .filter(str -> StringUtils.isNotBlank(str))
+            .filter(str -> builderName.equals(str)).findAny();
     return opt.isPresent();
   }
 
