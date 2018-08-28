@@ -6,7 +6,7 @@ import com.sun.jersey.api.client.WebResource;
 import javax.ws.rs.core.MediaType;
 import java.io.InputStream;
 
-public class SpeechBuilder extends AbstractBuilder {
+public class SpeechBuilder extends AbstractBuilder<SpeechBuilder,String> {
 
   public enum CONTENT_TYPE {
     WAV("audio/wav"),
@@ -79,8 +79,9 @@ public class SpeechBuilder extends AbstractBuilder {
     return this;
   }
 
-  public WebResource.Builder build() {
-    WebResource.Builder resource = super.build();
-    return resource;
+  public SpeechBuilder build() {
+    builder = super.preBuild();
+    return this;
   }
+
 }

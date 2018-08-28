@@ -1,8 +1,6 @@
 package org.cmfgi.witai.builder;
 
-import com.sun.jersey.api.client.WebResource;
-
-public class MessageBuilder extends AbstractBuilder {
+public class MessageBuilder extends AbstractBuilder<MessageBuilder, String> {
 
   private static final String MESSAGE_CONFIG_NAME = "message";
   private static final String CONTEXT_PARAM = "context";
@@ -48,8 +46,8 @@ public class MessageBuilder extends AbstractBuilder {
     return this;
   }
 
-  public WebResource.Builder build() {
-    return super.build();
+  public MessageBuilder build() {
+    builder = super.preBuild();
+    return this;
   }
-
 }

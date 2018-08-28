@@ -10,9 +10,12 @@ import javax.ws.rs.core.MultivaluedMap;
 import java.util.HashMap;
 import java.util.Map;
 
-abstract class AbstractBuilder {
+abstract class AbstractBuilder<T, K> {
 
   private static final String AUTHORIZATION_HEADER = "Authorization";
+  static final String JSON_CONTENT_TYPE = "application/json";
+  static final String CONTENT_TYPE_HEADER = "Content-type";
+
 
   enum REQUEST_TYPE {
     GET, POST;
@@ -21,6 +24,7 @@ abstract class AbstractBuilder {
   private static Client client;
   private MultivaluedMap<String, String> simpleParameters = new MultivaluedMapImpl();
   private Map<String, String> additionalHeader = new HashMap<>();
+  WebResource.Builder builder;
 
   static {
     ClientConfig cc = new DefaultClientConfig();
@@ -45,7 +49,26 @@ abstract class AbstractBuilder {
     simpleParameters.add(key, value);
   }
 
-  protected WebResource.Builder build() {
+  public abstract T build();
+
+  public K execute(Class<K> returnType, Object entity) {
+    if (type == REQUEST_TYPE.GET) {
+      return this.builder.get(returnType);
+    } else if (type == REQUEST_TYPE.POST) {
+      return executePostInternal(returnType, entity);
+    }
+    return null;
+  }
+
+  private K executePostInternal(Class<K> returnType, Object entity) {
+    if (entity == null) {
+      return this.builder.post(returnType);
+    }
+    return this.builder.post(returnType, entity);
+  }
+
+
+  WebResource.Builder preBuild() {
     WebResource resource = getResource();
     simpleParameters.add("v", WitContext.getConfiguredVersion());
     WebResource.Builder builder = resource.queryParams(simpleParameters).header(AUTHORIZATION_HEADER, "Bearer " + WitContext.getToken());
@@ -55,7 +78,7 @@ abstract class AbstractBuilder {
     return builder;
   }
 
-  protected void addAdditionalHeader(String k, String v) {
+  void addAdditionalHeader(String k, String v) {
     additionalHeader.put(k, v);
   }
 
