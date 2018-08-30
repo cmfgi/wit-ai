@@ -3,10 +3,9 @@
   <groupId>org.cmfgi</groupId>
   <artifactId>witai</artifactId>
   <versioning>
-    <release>hackathon</release>
     <versions>
-      <version>hackathon</version>
+      <version>1-SNAPSHOT</version>
     </versions>
-    <lastUpdated>20180830063024</lastUpdated>
+    <lastUpdated>20180830104006</lastUpdated>
   </versioning>
 </metadata>
