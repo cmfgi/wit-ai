@@ -19,7 +19,7 @@ public class BuilderSimpleTest {
 
   @Test
   public void testMessageBuilder() {
-    MessageBuilder messageBuilder = WitAi.getInstance().getMessageBuilder("whatever");
+    MessageBuilder messageBuilder = WitAi.getInstance().getMessageBuilder("show me all shirts you have");
     String returnValue = messageBuilder.build().execute(String.class, null);
     assert returnValue != null;
   }
