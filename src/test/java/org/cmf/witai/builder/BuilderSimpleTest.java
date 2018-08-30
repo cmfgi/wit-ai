@@ -9,7 +9,7 @@ import org.junit.Test;
 
 public class BuilderSimpleTest {
 
-  @Test
+  /*@Test
   public void testSpeechBuilder() {
     SpeechBuilder builder = WitAi.getInstance().getSpeechBuilder(SpeechBuilder.CONTENT_TYPE.WAV);
     builder.setFile(getClass().getClassLoader().getResourceAsStream("wit-ai/record.wav"));
@@ -22,7 +22,7 @@ public class BuilderSimpleTest {
     MessageBuilder messageBuilder = WitAi.getInstance().getMessageBuilder("Display all shirts in black");
     String returnValue = messageBuilder.build().execute(String.class, null);
     assert returnValue != null;
-  }
+  }*/
 
   /*@Test
   public void testAddEntityBuilder() {
@@ -31,11 +31,11 @@ public class BuilderSimpleTest {
     assert pojo != null;
   }*/
 
-  @Test
+  /*@Test
   public void testGetEntityBuilder() {
     GetEntityBuilder builder = new GetEntityBuilder("person_weight");
     String response = builder.build().execute(String.class, null);
     String a = "b";
-  }
+  }*/
 
 }
